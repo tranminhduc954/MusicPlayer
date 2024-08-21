@@ -58,6 +58,9 @@
         <div class="playlist">
 
         </div>
+
+        <!-- Import -->
+        <input type="file" id="fileInput" accept="audio/*">
     </div>
 
     <!-- Design from: https://static.collectui.com/shots/3671744/musicloud-revolutionary-app-for-music-streaming-large -->
@@ -93,6 +96,8 @@
         const repeatBtn = $('.btn-repeat')
         const playlist = $('.playlist')
 
+        const fileInput = $('#fileInput');
+
         const app = {
             currentIndex: 0,
 
@@ -102,7 +107,7 @@
 
             isRepeat: false,
 
-            config: JSON.stringify(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},            
+            config: JSON.stringify(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
 
             songs: [
                 {
@@ -167,7 +172,7 @@
                 }
             ],
 
-            setConfig: function(key, value) {
+            setConfig: function (key, value) {
                 this.config[key] = value;
                 localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
             },
@@ -310,7 +315,7 @@
                 // Lắng nghe hành vi click vào playlist
                 playlist.onclick = function (e) {
                     const songNode = e.target.closest('.song:not(.active)')
-                    if (songNode || e.target.closest('.option') ) {
+                    if (songNode || e.target.closest('.option')) {
                         // Xử lý khi click vào song
                         if (songNode) {
                             _this.currentIndex = Number(songNode.dataset.index)
@@ -320,9 +325,21 @@
                         }
 
                         // Xử lý khi click vào song option
-                        if (e.target.closest('.option') ) {
+                        if (e.target.closest('.option')) {
 
                         }
+                    }
+                }
+
+                // Import bài hát
+                fileInput.onchange = function (event) {
+                    const file = event.target.files[0]; // Lấy tệp người dùng đã chọn
+                    if (file) {
+                        const fileURL = URL.createObjectURL(file); // Tạo URL cho tệp
+                        audio.src = fileURL; // Gán URL cho phần tử audio
+                        heading.textContent = file.name; // Cập nhật tên bài hát
+                        cdThumb.style.backgroundImage = `url('./img/default.jpg')`; // Đặt ảnh mặc định cho CD thumb
+                        audio.play(); // Phát bài hát
                     }
                 }
             },

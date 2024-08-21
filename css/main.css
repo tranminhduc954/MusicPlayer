@@ -189,3 +189,8 @@ header h2 {
     color: #999;
     font-size: 18px;
 }
+
+#fileInput {
+    margin-top: 20px;
+    display: block;
+}
